@@ -1,0 +1,47 @@
+{% load base64_encode %}
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="{% static 'imagedetails/style.css' %}" rel='stylesheet'>
+    <h2 style="margin-left: 500px;padding-top: 40PX;font-weight:bold;color:forestgreen">Aesthetic Galleries</h2>
+    <title>Show Gallery</title>
+  </head>
+  <body class="registration">
+</br>
+  <a href="{% url 'upload_image' %}" type="button" style="font-size: 1rem;margin-left:990px" class="btn btn-primary btn-md">Image Upload</a>
+  <a href="{% url 'logout_user' %}" type="button" class="btn btn-danger btn-md" style="margin-left:15px">Log Out</a>
+</br>
+    <div>
+       <form action="{% url "search_image" %}" method="get">
+       {% csrf_token %}
+       <div class="input-group">
+           <input name="q" type="text" placeholder="Search" class="form-control form-control-lg " style="margin-left: 38px;" >
+            <button class="btn btn-dark btn-md " style="margin-right: 800px;">Search</button>
+       </div>
+   </form>
+  </div>
+  </br>
+    <div class="row">
+    {% for x in data %}
+        <div class="col-md-4">
+          <div class="thumbnail" style="margin-left: 40px;">
+              <img src="data:image/jpeg;base64, {{x.image_data|base64_encode}}" alt="image" style="width:80%;height:45%;padding-left: 10px;margin-bottom:13px;">
+              <div>
+                <label class="form-label" style="padding-left:5%"><b>Title:</b> {{ x.title }}</label>
+              </div>
+              <div>
+                <label class="form-label" style="padding-left:5%"><b>Description:</b> {{ x.description }}</label>
+              </div>
+              <div>
+                <label class="form-label" style="padding-left:5%"><b>Category:</b> {{ x.category }}</label>
+              </div>
+          </div>
+        </div>
+        {% endfor %}
+    </div>
+  </body>
+</html> 

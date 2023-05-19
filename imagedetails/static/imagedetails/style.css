@@ -1,0 +1,23 @@
+body{
+    background: url("images/logintech.png")  50% 0 no-repeat fixed;
+    background-size: 1800px 900px;
+    background-repeat: no-repeat;
+    background-position: top;
+    background-attachment: fixed;
+}
+
+.image-upload{
+    background: url("images/login_background_1.jpg")  50% 0 no-repeat fixed;
+    background-size: 1800px 900px;
+    background-repeat: no-repeat;
+    background-position: top;
+    background-attachment: fixed;
+}
+
+.registration{
+    background: url("images/registration.jpg")  50% 0 no-repeat fixed;
+    background-size: 1800px 900px;
+    background-repeat: no-repeat;
+    background-position: top;
+    background-attachment: fixed;
+}

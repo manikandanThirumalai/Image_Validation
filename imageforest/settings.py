@@ -18,10 +18,12 @@ from django.conf import settings
 from django.http import HttpResponse
 import toml
 
+from configurations.config import ConfigClass
+
 headers = {'content_type': 'application/json'}
 
 #Load configuration from TOML file
-with open('config.toml', 'r') as f:
+with open('configurations\config.toml', 'r') as f:
     config = toml.load(f)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -83,14 +85,16 @@ TEMPLATES = [
 WSGI_APPLICATION = 'imageforest.wsgi.application'
 
 #Database configuration
+config = ConfigClass()
+
 DATABASES = {
     'default': {
-        'ENGINE': config['database']['engine'],
-        'NAME': config['database']['database_name'],
-        'USER': config['database']['username'],
-        'PASSWORD': config['database']['password'],
-        'HOST': config['database']['host'],
-        'PORT': config['database']['port'],
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME':  config.DATABASE_CONFIG['database_name'],
+        'USER': config.DATABASE_CONFIG['username'],
+        'PASSWORD': config.DATABASE_CONFIG['password'],
+        'HOST': config.DATABASE_CONFIG['host'],
+        'PORT': config.DATABASE_CONFIG['port'],
     }
 }
 
@@ -144,3 +148,35 @@ IMGPATH="showgallery.html"
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'details': {
+            'format': '%(levelname)s %(asctime)s [%(filename)s %(funcName)s %(lineno)d] [Pid %(process)d, Thread %(thread)d]: %(message)s'
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': 'loggerDjango-debug.log',
+            'formatter': 'details',
+        },
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file', 'console'],
+            'level': 'DEBUG',
+            'propagate': True,
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'DEBUG')
+        },
+    },
+}

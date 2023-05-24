@@ -12,7 +12,7 @@ class ImageForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         # call the validation_setting function
         self.config = Validationdetails().validation_setting()
-        image = self.cleaned_data.get('binaryimage')
+        image = self.cleaned_data.get('image')
 
         if not image:
             raise ValidationError(self.config.image_empty_error)

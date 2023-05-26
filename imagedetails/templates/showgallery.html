@@ -7,13 +7,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link href="{% static 'imagedetails/style.css' %}" rel='stylesheet'>
-    <h2 style="margin-left: 500px;padding-top: 40PX;font-weight:bold;color:forestgreen">Aesthetic Galleries</h2>
+    <h2 style="margin-left: 500px;padding-top: 40PX;font-weight:bold;color:forestgreen">Exquisite Galleries</h2>
     <title>Show Gallery</title>
   </head>
   <body class="registration">
 </br>
   <a href="{% url 'upload_image' %}" type="button" style="font-size: 1rem;margin-left:990px" class="btn btn-primary btn-md">Image Upload</a>
   <a href="{% url 'logout_user' %}" type="button" class="btn btn-danger btn-md" style="margin-left:15px">Log Out</a>
+  <a href="{% url 'Stockapp:indexpage' %}" type="button" style="margin-left:68%;margin-top: -5%;" class="btn btn-success btn-md">Stock App</a>
 </br>
     <div>
        <form action="{% url "search_image" %}" method="get">

@@ -13,6 +13,19 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 import os
 from pathlib import Path
 
+import json
+from django.conf import settings
+from django.http import HttpResponse
+import toml
+
+from configurations.config import ConfigClass
+
+headers = {'content_type': 'application/json'}
+
+#Load configuration from TOML file
+with open('configurations\\config.toml', 'r') as f:
+    config = toml.load(f)
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -32,6 +45,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'stockapp',
     'imagedetails',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -71,20 +85,22 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'imageforest.wsgi.application'
 
+#Database configuration
 
-# Database
-# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
+dbsetting = ConfigClass()
+config = dbsetting.load_app_config_settings()
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'imageforest',
-        'USER': 'postgres',
-        'PASSWORD': 'Temp@123',
-        'HOST': 'localhost',
-        'PORT': '5432'
+        'NAME':  config.DATABASE_CONFIG['database_name'],
+        'USER': config.DATABASE_CONFIG['username'],
+        'PASSWORD': config.DATABASE_CONFIG['password'],
+        'HOST': config.DATABASE_CONFIG['host'],
+        'PORT': config.DATABASE_CONFIG['port'],
     }
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -130,3 +146,40 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_URL= "/media/"
 MEDIA_ROOT =os.path.join(BASE_DIR,"/media")
+
+IMGPATH="showgallery.html"
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+]
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'details': {
+            'format': '%(levelname)s %(asctime)s [%(filename)s %(funcName)s %(lineno)d] [Pid %(process)d, Thread %(thread)d]: %(message)s'
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': 'loggerDjango-debug.log',
+            'formatter': 'details',
+        },
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file', 'console'],
+            'propagate': True,
+        },
+    },
+}
+

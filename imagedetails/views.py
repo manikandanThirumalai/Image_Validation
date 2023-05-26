@@ -9,6 +9,8 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.forms import UserCreationForm
 from django.db import connections
+from configurations.email_service import send_email
+from configurations.config import ConfigClass
 import logging
 
 # Get the logger instance
@@ -36,7 +38,7 @@ def login_user(request):
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
-                logger.info('Info message')
+                logger.info('Info message:' + '' + username + ' ' + password)
                 return redirect('display/')
     else:
         form = AuthenticationForm(request)
@@ -71,9 +73,11 @@ def upload_image(request):
             model.category=image_category
             model.image_data=image_data
             model.save()
-            return render(request, settings.IMGPATH,context)
+            send_email(f"Image with name {model.title} uploaded successfully", "Success - Image uploaded")
+            return render(request, 'showgallery.html',context)
             
           except:
+            send_email(f"Error occured while uploading image with name {model.title}", "Failure - Image uploaded!")
             pass
        
     else:

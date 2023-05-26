@@ -23,7 +23,7 @@ from configurations.config import ConfigClass
 headers = {'content_type': 'application/json'}
 
 #Load configuration from TOML file
-with open('configurations\config.toml', 'r') as f:
+with open('configurations\\config.toml', 'r') as f:
     config = toml.load(f)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -45,6 +45,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'stockapp',
     'imagedetails',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -85,7 +86,9 @@ TEMPLATES = [
 WSGI_APPLICATION = 'imageforest.wsgi.application'
 
 #Database configuration
-config = ConfigClass()
+
+dbsetting = ConfigClass()
+config = dbsetting.load_app_config_settings()
 
 DATABASES = {
     'default': {
@@ -97,6 +100,7 @@ DATABASES = {
         'PORT': config.DATABASE_CONFIG['port'],
     }
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -174,9 +178,8 @@ LOGGING = {
     'loggers': {
         'django': {
             'handlers': ['file', 'console'],
-            'level': 'DEBUG',
             'propagate': True,
-            'level': os.getenv('DJANGO_LOG_LEVEL', 'DEBUG')
         },
     },
 }
+
